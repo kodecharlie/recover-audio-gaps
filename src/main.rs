@@ -239,6 +239,8 @@ impl StreamDeNoiserInpainter {
         let rms = (sum_squares / window.len() as f32).sqrt();
         let max_peak = window.iter().map(|s| s.abs()).fold(0.0f32, f32::max);
 
+        // XXX the max_peak test is disabled because it was too restrictive; that is, we can still
+        // have white noise that is somewhat muted (smaller ampltitude) but still disruptive.
         // zcr > ZCR_THRESHOLD && rms > RMS_THRESHOLD && max_peak > PEAK_THRESHOLD
         zcr > ZCR_THRESHOLD && rms > RMS_THRESHOLD
     }
