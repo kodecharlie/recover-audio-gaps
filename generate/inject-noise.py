@@ -73,15 +73,24 @@ if len(samples) < TOTAL_SAMPLES:
 else:
     samples = samples[:TOTAL_SAMPLES]
 
-# Inject white noise bursts directly into 16-bit sample range (-32768 to 32767)
+# Inject white noise bursts mixed directly into 16-bit sample range (-32768 to 32767)
 print("Injecting white noise interruptions at 10s and 60s...")
+noise_gain = 0.5  # Adjust this between 0.0 (silent) and 1.0 (full volume noise)
+
 for burst in NOISE_BURSTS:
     start_sample = int(burst["time_sec"] * SAMPLE_RATE)
     num_noise_samples = int((burst["duration_ms"] / 1000.0) * SAMPLE_RATE)
     end_sample = min(start_sample + num_noise_samples, TOTAL_SAMPLES)
 
     for i in range(start_sample, end_sample):
-        samples[i] = random.randint(-32768, 32767)
+        # Generate noise
+        noise = random.randint(-32768, 32767)
+        
+        # Mix existing audio with scaled noise
+        mixed_val = samples[i] + int(noise * noise_gain)
+        
+        # Truncate / clamp to prevent integer overflow/clipping
+        samples[i] = max(-32768, min(32767, mixed_val))
 
 # Export as 16-bit Signed PCM WAV
 output_filename = "professor_1930s.wav"

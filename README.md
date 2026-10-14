@@ -7,6 +7,7 @@ To come up with test data, we rely on Python logic under `generate/inject-noise.
 ## Install dependencies
 You will need to install Python dependencies before running `inject-noise.py`.  For example:
 ```
+pip install audioop-lts
 pip install edge-tts pydub
 ```
 This is not an exhaustive list of dependencies.  You will need to figure out relevant dependencies for your environment.
